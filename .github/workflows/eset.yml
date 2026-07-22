@@ -35,17 +35,12 @@ jobs:
         run: |
           python main.py --chrome --key --email-api ${{ github.event.inputs.mail }} --skip-update-check --no-logo
 
-      - name: Find and Save Key Files
-        if: always()
-        run: |
-          # Näme faýl döredilen bolsa barlamak üçin
-          Get-ChildItem -Recurse -Include *.txt
-
-      - name: Upload Artifacts (Keys)
+      - name: Upload Generated Keys
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: eset-generated-keys
+          name: eset-real-keys
           path: |
-            *.txt
-            **/*.txt
+            *KEYS*
+            *keys*
+            output/
