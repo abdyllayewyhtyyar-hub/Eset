@@ -134,3 +134,12 @@ jobs:
             echo "`nKey:" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
             Get-Content -Path ./*KEYS.txt -ErrorAction SilentlyContinue | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
           }
+
+      - name: Upload Result Files (Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: eset-keys-and-accounts
+          path: |
+            *KEYS.txt
+            *ACCOUNTS.txt
+            *.txt
