@@ -28,19 +28,23 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run Eset Generator
         run: |
-          python main.py --chrome --key --email-api ${{ github.event.inputs.mail }} --skip-update-check --no-logo
+          python main.py --chrome --key --email-api ${{ github.event.inputs.mail }} --skip-update-check --no-logo --disable-progress-bar
 
-      - name: Upload Generated Keys
+      - name: Find and Move Keys
+        if: always()
+        run: |
+          mkdir -p extracted_keys
+          robocopy . extracted_keys /s /i /wildcard *.txt *.log *account* *key* 
+          exit 0
+
+      - name: Upload Generated Keys Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: eset-real-keys
-          path: |
-            *KEYS*
-            *keys*
-            output/
+          name: eset-generated-keys
+          path: extracted_keys/
